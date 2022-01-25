@@ -6,7 +6,7 @@ import { QUERY_PRODUCTS } from '../utils/queries';
 import spinner from '../assets/spinner.gif';
 
 import { useStoreContext } from '../utils/GlobalState';
-import { UPDATE_PRODUCTS } from '../utils/actions';
+import { REMOVE_FROM_CART, UPDATE_CART_QUANTITY, ADD_TO_CART, UPDATE_PRODUCTS } from '../utils/actions';
 
 import Cart from '../components/Cart';
 
@@ -31,6 +31,13 @@ function Detail() {
     }
   }, [products, data, dispatch, id]);
 
+  const addToCart = () => {
+    dispatch({
+      type: ADD_TO_CART,
+      product: { ...currentProduct, purchaseQuantity: 1 },
+    });
+  };
+
   return (
     <>
       {currentProduct ? (
@@ -42,7 +49,7 @@ function Detail() {
           <p>{currentProduct.description}</p>
 
           <p>
-            <strong>Price:</strong>${currentProduct.price} <button>Add to Cart</button>
+            <strong>Price:</strong>${currentProduct.price} <button onClick={addToCart}>Add to Cart</button>
             <button>Remove from Cart</button>
           </p>
 
