@@ -5,20 +5,29 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PRODUCTS } from '../utils/queries';
 import spinner from '../assets/spinner.gif';
 
+import { useStoreContext } from '../utils/GlobalState';
+import { UPDATE_PRODUCTS } from '../utils/actions';
+
 function Detail() {
+  const [state, dispatch] = useStoreContext();
   const { id } = useParams();
 
   const [currentProduct, setCurrentProduct] = useState({});
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const products = data?.products || [];
+  const products = state;
 
   useEffect(() => {
     if (products.length) {
-      setCurrentProduct(products.find((product) => product._id === id));
+      setCurrentProduct(products.find(product => product._id === id));
+    } else if (data) {
+      dispatch({
+        type: UPDATE_PRODUCTS,
+        products: data.products,
+      });
     }
-  }, [products, id]);
+  }, [products, data, dispatch, id]);
 
   return (
     <>
@@ -31,15 +40,11 @@ function Detail() {
           <p>{currentProduct.description}</p>
 
           <p>
-            <strong>Price:</strong>${currentProduct.price}{' '}
-            <button>Add to Cart</button>
+            <strong>Price:</strong>${currentProduct.price} <button>Add to Cart</button>
             <button>Remove from Cart</button>
           </p>
 
-          <img
-            src={`/images/${currentProduct.image}`}
-            alt={currentProduct.name}
-          />
+          <img src={`/images/${currentProduct.image}`} alt={currentProduct.name} />
         </div>
       ) : null}
       {loading ? <img src={spinner} alt="loading" /> : null}
