@@ -16,7 +16,7 @@ function Detail() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const products = state;
+  const { products } = state;
 
   useEffect(() => {
     if (products.length) {
