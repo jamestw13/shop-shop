@@ -26,6 +26,14 @@ function ProductList() {
       data.products.forEach(product => {
         idbPromise('products', 'put', product);
       });
+    } else if (!loading) {
+      // while offline, get all data from IndexedDB 'products' store
+      idbPromise('products', 'get').then(products => {
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: products,
+        });
+      });
     }
   }, [data, loading, dispatch]);
 
