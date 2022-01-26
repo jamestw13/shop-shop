@@ -57,7 +57,7 @@ function Detail() {
       });
 
       // incrementing IndexedDB store
-      idbPromise('cart', put, {
+      idbPromise('cart', 'put', {
         ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity + 1),
       });
