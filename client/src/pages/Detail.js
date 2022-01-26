@@ -47,17 +47,31 @@ function Detail() {
   const addToCart = () => {
     const itemInCart = cart.find(cartItem => cartItem._id === id);
 
+    // if product is already in cart, increment
     if (itemInCart) {
+      // incrementing GlobalStore
       dispatch({
         type: UPDATE_CART_QUANTITY,
         _id: id,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1,
       });
+
+      // incrementing IndexedDB store
+      idbPromise('cart', put, {
+        ...itemInCart,
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity + 1),
+      });
+
+      // if product isn't in cart yet, add it
     } else {
+      // add item to GlobalStore
       dispatch({
         type: ADD_TO_CART,
         product: { ...currentProduct, purchaseQuantity: 1 },
       });
+
+      // add item to IndexedDB store
+      idbPromise('cart', 'put', { ...currentProduct, purchaseQuantity: 1 });
     }
   };
 
@@ -66,6 +80,8 @@ function Detail() {
       type: REMOVE_FROM_CART,
       _id: currentProduct._id,
     });
+
+    idbPromise('cart', 'delete', { ...currentProduct });
   };
 
   return (
