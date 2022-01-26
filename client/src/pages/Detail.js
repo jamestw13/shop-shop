@@ -59,7 +59,7 @@ function Detail() {
       // incrementing IndexedDB store
       idbPromise('cart', 'put', {
         ...itemInCart,
-        purchaseQuantity: parseInt(itemInCart.purchaseQuantity + 1),
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1,
       });
 
       // if product isn't in cart yet, add it
@@ -86,7 +86,7 @@ function Detail() {
 
   return (
     <>
-      {currentProduct ? (
+      {currentProduct && cart ? (
         <div className="container my-1">
           <Link to="/">← Back to Products</Link>
 

@@ -7,9 +7,12 @@ const CartItem = ({ item }) => {
   const [, dispatch] = useStoreContext();
 
   const removeFromCart = item => {
-    dispatch({ type: REMOVE_FROM_CART, _id: item._id });
+    dispatch({
+      type: REMOVE_FROM_CART,
+      _id: item._id,
+    });
+    idbPromise('cart', 'delete', { ...item });
   };
-  idbPromise('cart', 'delete', { ...item });
 
   const onChange = e => {
     const value = e.target.value;
